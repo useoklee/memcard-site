@@ -2,17 +2,16 @@
 title: Support
 ---
 
-# 고객 지원 · Support
+<section lang="ko" markdown="1">
+
+# 고객 지원
 
 MemCard는 빠른 사전 검색과 간격 반복 복습을 중심으로 한 단어 학습 앱입니다.
-MemCard is a vocabulary learning app focused on quick dictionary lookups with spaced-repetition review.
 
-## 한국어
-
-### 문의
+## 문의
 이메일: <braverymoment@gmail.com>
 
-### 자주 묻는 질문
+## 자주 묻는 질문
 
 **단어를 어떻게 저장하나요?**
 검색 결과 화면에서 북마크 아이콘을 탭하세요. "내 단어"에 추가되고 간격 반복 복습 큐에 들어갑니다.
@@ -26,17 +25,21 @@ MemCard is a vocabulary learning app focused on quick dictionary lookups with sp
 **검색한 단어가 "내 단어"에 안 보여요.**
 상세 화면에서 북마크 아이콘을 탭해 저장했는지(아이콘이 채워졌는지) 확인하세요. 또한 저장 시 선택했던 학습 언어와 같은 언어로 보고 있는지 확인하세요.
 
-### 개인정보
+## 개인정보
 [개인정보 처리방침](privacy.html) 참고.
 
----
+</section>
 
-## English
+<section lang="en" markdown="1">
 
-### Contact
+# Support
+
+MemCard is a vocabulary learning app focused on quick dictionary lookups with spaced-repetition review.
+
+## Contact
 Email: <braverymoment@gmail.com>
 
-### Frequently asked questions
+## Frequently asked questions
 
 **How do I save a word?**
 Search for a word, then tap the bookmark icon on the result screen. The word is added to "My Words" and queued for spaced-repetition review.
@@ -50,5 +53,7 @@ Not yet. Saved cards live on the device only. If you restore the device from an 
 **A word I searched isn't appearing in My Words.**
 Make sure you tapped the bookmark icon on the detail screen (the star/bookmark turns filled when saved). Also check that you are viewing the same learning language you saved under.
 
-### Privacy
+## Privacy
 See our [Privacy Policy](privacy.html).
+
+</section>

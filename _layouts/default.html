@@ -6,6 +6,20 @@
   <title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name="description" content="{{ site.description }}">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E📖%3C/text%3E%3C/svg%3E">
+
+  <!-- Run before body to prevent FOUC of the non-active language -->
+  <script>
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem('memcard-lang'); } catch (_) {}
+      var browser = (navigator.language || 'ko').toLowerCase().slice(0, 2);
+      var lang = (stored === 'ko' || stored === 'en')
+        ? stored
+        : (browser === 'en' ? 'en' : 'ko');
+      document.documentElement.lang = lang;
+    })();
+  </script>
+
   <style>
     :root {
       --bg: #fff;
@@ -14,6 +28,7 @@
       --rule: #e5e5e7;
       --link: #0066cc;
       --code-bg: #f5f5f7;
+      --toggle-bg: rgba(0, 0, 0, 0.04);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -23,6 +38,7 @@
         --rule: #2c2c2e;
         --link: #4ea1ff;
         --code-bg: #2c2c2e;
+        --toggle-bg: rgba(255, 255, 255, 0.06);
       }
     }
     * { box-sizing: border-box; }
@@ -39,19 +55,48 @@
     main {
       max-width: 680px;
       margin: 0 auto;
-      padding: 3rem 1.25rem 5rem;
+      padding: 1.25rem 1.25rem 5rem;
     }
     header.site {
-      padding: 1.25rem 0 0;
-      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.5rem 0 1.5rem;
     }
-    header.site a {
+    header.site a.site-name {
       color: var(--fg);
       text-decoration: none;
       font-weight: 600;
       letter-spacing: -0.01em;
     }
-    h1 { font-size: 2rem; line-height: 1.2; margin: 2rem 0 1rem; letter-spacing: -0.02em; }
+    .lang-toggle {
+      display: inline-flex;
+      background: var(--toggle-bg);
+      border-radius: 7px;
+      padding: 2px;
+    }
+    .lang-toggle button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.25rem 0.65rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-toggle button:hover { color: var(--fg); }
+    .lang-toggle button.active {
+      background: var(--bg);
+      color: var(--fg);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 { font-size: 2rem; line-height: 1.2; margin: 1rem 0 0.5rem; letter-spacing: -0.02em; }
     h2 { font-size: 1.4rem; margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
     h3 { font-size: 1.1rem; margin: 1.75rem 0 0.5rem; }
     p { margin: 0.75rem 0; }
@@ -68,6 +113,11 @@
       font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
     }
     em { color: var(--muted); font-style: normal; }
+    .caption {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 1.5rem;
+    }
     footer {
       margin-top: 4rem;
       padding-top: 1.5rem;
@@ -76,17 +126,45 @@
       font-size: 0.9rem;
     }
     footer a { color: var(--muted); }
+
+    /* Language toggling — show only the section matching <html lang>. */
+    html[lang="ko"] [lang="en"] { display: none; }
+    html[lang="en"] [lang="ko"] { display: none; }
   </style>
 </head>
 <body>
   <main>
     <header class="site">
-      <a href="/">MemCard</a>
+      <a class="site-name" href="/">MemCard</a>
+      <nav class="lang-toggle" aria-label="Language">
+        <button type="button" data-lang-switch="ko">KO</button>
+        <button type="button" data-lang-switch="en">EN</button>
+      </nav>
     </header>
     {{ content }}
-    <footer>
-      © 2026 MemCard
-    </footer>
+    <footer>© 2026 MemCard</footer>
   </main>
+
+  <script>
+    (function () {
+      var supported = ['ko', 'en'];
+      function apply(lang) {
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-lang-switch]').forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.langSwitch === lang);
+          btn.setAttribute('aria-pressed', btn.dataset.langSwitch === lang ? 'true' : 'false');
+        });
+      }
+      apply(document.documentElement.lang);
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-lang-switch]');
+        if (!btn) return;
+        var lang = btn.dataset.langSwitch;
+        if (supported.indexOf(lang) === -1) return;
+        try { localStorage.setItem('memcard-lang', lang); } catch (_) {}
+        apply(lang);
+      });
+    })();
+  </script>
 </body>
 </html>
