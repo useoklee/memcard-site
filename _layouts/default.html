@@ -12,10 +12,15 @@
     (function () {
       var stored = null;
       try { stored = localStorage.getItem('memcard-lang'); } catch (_) {}
-      var browser = (navigator.language || 'ko').toLowerCase().slice(0, 2);
-      var lang = (stored === 'ko' || stored === 'en')
-        ? stored
-        : (browser === 'en' ? 'en' : 'ko');
+      function detect() {
+        try {
+          var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          if (tz === 'Asia/Seoul') return 'ko';
+        } catch (_) {}
+        var browser = (navigator.language || '').toLowerCase().slice(0, 2);
+        return browser === 'ko' ? 'ko' : 'en';
+      }
+      var lang = (stored === 'ko' || stored === 'en') ? stored : detect();
       document.documentElement.lang = lang;
     })();
   </script>
@@ -70,30 +75,21 @@
       font-weight: 600;
       letter-spacing: -0.01em;
     }
-    .lang-toggle {
-      display: inline-flex;
-      background: var(--toggle-bg);
-      border-radius: 7px;
-      padding: 2px;
-    }
-    .lang-toggle button {
+    .lang-select {
       appearance: none;
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      font: inherit;
-      font-size: 0.82rem;
-      font-weight: 500;
-      padding: 0.25rem 0.65rem;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-    }
-    .lang-toggle button:hover { color: var(--fg); }
-    .lang-toggle button.active {
-      background: var(--bg);
+      -webkit-appearance: none;
+      border: 1px solid var(--rule);
+      background: var(--bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path fill='%236e6e73' d='M6 8L0 0h12z'/></svg>") no-repeat right 0.6rem center / 8px 6px;
       color: var(--fg);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+      font: inherit;
+      font-size: 0.88rem;
+      padding: 0.3rem 1.6rem 0.3rem 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .lang-select:focus {
+      outline: 2px solid var(--link);
+      outline-offset: 1px;
     }
 
     h1 { font-size: 2rem; line-height: 1.2; margin: 1rem 0 0.5rem; letter-spacing: -0.02em; }
@@ -136,10 +132,10 @@
   <main>
     <header class="site">
       <a class="site-name" href="/">MemCard</a>
-      <nav class="lang-toggle" aria-label="Language">
-        <button type="button" data-lang-switch="ko">KO</button>
-        <button type="button" data-lang-switch="en">EN</button>
-      </nav>
+      <select id="lang-select" class="lang-select" aria-label="Language">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+      </select>
     </header>
     {{ content }}
     <footer>© 2026 MemCard</footer>
@@ -147,22 +143,13 @@
 
   <script>
     (function () {
-      var supported = ['ko', 'en'];
-      function apply(lang) {
+      var select = document.getElementById('lang-select');
+      if (!select) return;
+      select.value = document.documentElement.lang;
+      select.addEventListener('change', function () {
+        var lang = select.value;
         document.documentElement.lang = lang;
-        document.querySelectorAll('[data-lang-switch]').forEach(function (btn) {
-          btn.classList.toggle('active', btn.dataset.langSwitch === lang);
-          btn.setAttribute('aria-pressed', btn.dataset.langSwitch === lang ? 'true' : 'false');
-        });
-      }
-      apply(document.documentElement.lang);
-      document.addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-lang-switch]');
-        if (!btn) return;
-        var lang = btn.dataset.langSwitch;
-        if (supported.indexOf(lang) === -1) return;
         try { localStorage.setItem('memcard-lang', lang); } catch (_) {}
-        apply(lang);
       });
     })();
   </script>
