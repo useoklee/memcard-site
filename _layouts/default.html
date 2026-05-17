@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E📖%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1f;
+      --muted: #6e6e73;
+      --rule: #e5e5e7;
+      --link: #0066cc;
+      --code-bg: #f5f5f7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1e;
+        --fg: #f2f2f7;
+        --muted: #98989d;
+        --rule: #2c2c2e;
+        --link: #4ea1ff;
+        --code-bg: #2c2c2e;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.25rem 5rem;
+    }
+    header.site {
+      padding: 1.25rem 0 0;
+      margin-bottom: 1.5rem;
+    }
+    header.site a {
+      color: var(--fg);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    h1 { font-size: 2rem; line-height: 1.2; margin: 2rem 0 1rem; letter-spacing: -0.02em; }
+    h2 { font-size: 1.4rem; margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
+    h3 { font-size: 1.1rem; margin: 1.75rem 0 0.5rem; }
+    p { margin: 0.75rem 0; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+    ul, ol { padding-left: 1.5rem; }
+    li { margin: 0.25rem 0; }
+    code {
+      background: var(--code-bg);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.92em;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    }
+    em { color: var(--muted); font-style: normal; }
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="site">
+      <a href="/">MemCard</a>
+    </header>
+    {{ content }}
+    <footer>
+      © 2026 MemCard
+    </footer>
+  </main>
+</body>
+</html>
